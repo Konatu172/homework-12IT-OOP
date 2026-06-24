@@ -1,200 +1,32 @@
-# ЭТАП 1 - Инкапсуляция: Создаём монстра
-import random
+class Inventory:
+    def __init__(self, gold):
 
-#монстр родитель
+        self.__gold = gold
 
-class Monster:
+    def get_gold(self):
 
-    def __init__(self, name, hp, dmg):
+        return f"В кошеле : {self.__gold} проклятых монетк!"
 
-        self.__name = name
+    def change_gold(self, amount):
 
-        self.__hp = hp
+        new_balance = self.__gold + amount
 
-        self.__dmg = dmg
+        if new_balance < 0:
 
-    def get_hp(self):
-
-        return self.__hp
-
-    def get_dmg(self):
-
-        return self.__dmg
-
-    def get_name(self):
-
-        return self.__name
-
-    # Проверка на минус хп
-
-    def set_hp(self, value):
-
-        if value < 0:
-
-            self.__hp = 0
-
-    # Проверка на жив/мертв
-
-    def is_alive(self):
-
-        return self.__hp > 0
-
-    def show_status(self):
-
-        print(f'Name: {self.__name}')
-
-        print(f'HP: {self.__hp}')
-
-    def take_damage(self, damage):
-
-        self.__hp -= damage
-
-    def attack_hunter(self, hunter):
-
-        hunter = self.__hp - self.__dmg
-
-#дочерние классы
-
-# Зомби ничего не делает
-
-# ЭТАП 2 - Наследование: Армия нечисти
-class Zombie(Monster):
-
-    def __init__(self, name):
-
-        super().__init__(name, 120, 10)
-
-    def take_damage(self, damage):
-
-        self.set_hp(self.get_hp() - damage)
-
-        print(f"Ого! Зомби теряет конечность! Получено {damage}, Осталось: {self.get_hp()}хп")
-
-# Вампир поглощает 5 хп от получаемого урона
-
-class Vampire(Monster):
-
-    def __init__(self, name):
-
-        super().__init__(name, 80, 15)
-
-    def take_damage(self, damage):
-
-        self.set_hp(self.get_hp() - damage)
-
-        print(f"Дракула поглащает 5 урона! получено: {damage}, осталось: {self.get_hp()}хп")
-
-# Призрак может в 30% уклонится от удара
-
-class Ghost(Monster):
-
-    def __init__(self, name):
-
-        super().__init__(name, 60, 20)
-
-    def take_damage(self, damage):
-
-        if random.random() < 0.3:
-
-            self.set_hp(self.get_hp() - damage)
-
-            print(f"Призрак получает урон {damage}, Осталось {self.get_hp()}хп")
+            print("Не достаточно золота для сделки!")
 
         else:
 
-            print("призрак увернулся!")
+            self.__gold = new_balance
 
-# превращение возможно если у оборотня больше 50 хп
+bag = Inventory(50)
 
-class Werewolf(Monster):
+print(bag.get_gold())
 
-    def __init__(self, name):
+bag.change_gold(-30)
 
-        super().__init__(name, 100, 25)
+bag.change_gold(10)
 
-    def take_damage(self, damage):
+print(bag.get_gold())
 
-        self.set_hp(self.get_hp() - damage)
-
-        print(f"Оборотень получает урон {damage}, у него осталось: {self.get_hp()} хп")
-
-        if self.__hp < 50:
-
-            print("Оборотень трансформируется!")
-
-#проверка с задания
-
-v = Vampire("Дракула")
-
-v.take_damage(30)
-
-# Дракула поглощает 5 урона! Получено: 25. HP: 55
-
-z = Zombie("Зомби")
-
-z.take_damage(30)
-
-# Зомби теряет конечность! Получено: 30. HP: 90
-
-# ЭТАП 3 - Полиморфизм: Арсенал охотника
-class Weapon:
-
-    def __init__(self, name):
-
-        self.__name = name
-
-    def get_name(self):
-
-        return self.__name
-
-    def use(self, monster):
-
-        # Базовый метод использования оружия (будет переопределён)
-
-        pass
-
-class SilverSword(Weapon):
-
-    def __init__(self):
-
-        super().__init__("Серебряный меч")
-
-    def use(self, monster):
-
-        damage = 30
-
-        print(f"\nВан Хельсинг взмахивает Серебряным мечом!")
-
-        monster.take_damage(damage)
-
-class HolyWater(Weapon):
-
-    def __init__(self):
-
-        super().__init__("Святая вода")
-
-    def use(self, monster):
-
-        damage = 20
-
-        print(f"\nВан Хельсинг брызгает Святой водой!")
-
-        monster.take_damage(damage)
-
-class CrossbowBolt(Weapon):
-
-    def __init__(self):
-
-        super().__init__("Арбалет с болтом")
-
-    def use(self, monster):
-
-        damage = 25
-
-        print(f"\nВан Хельсинг стреляет из арбалета!")
-
-        monster.take_damage(damage)
-
-# ЭТАП 4 - Класс Охотника
-
-
+bag.change_gold(-100)
